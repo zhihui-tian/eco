@@ -10,5 +10,5 @@
 - main.py: run the pipeline to train a model and use the trained model to predicte land use/ecosystem service map
 
 ## paper
-
+https://ieeexplore.ieee.org/abstract/document/10642804
 
