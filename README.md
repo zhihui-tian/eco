@@ -1,8 +1,8 @@
 # ecosystem project pipeline
 
 ## Data
-Land use map: https://www.sciencebase.gov/catalog/item/664e0d2bd34e702fe8744536
-Satellite image: Dr. Zhao hipergator
+- Land use map: https://www.sciencebase.gov/catalog/item/664e0d2bd34e702fe8744536
+- Satellite image: Dr. Zhao hipergator
 
 ## Code
 - preprocess_map.py: extract polk county by shapefile from the whole land use map and random sampling points
