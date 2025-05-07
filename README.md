@@ -5,6 +5,7 @@
 - Satellite image: Dr. Zhao hipergator
 
 ## Code
+### simple demo
 - truth_branford.py: way to generate label
 - run.py: a simple case to demonstrate how the pipeline works
   
