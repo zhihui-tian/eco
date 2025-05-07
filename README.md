@@ -13,8 +13,7 @@
 - preprocess_label.py: preprocess the labels and split into training and validation
 - main.py: run the pipeline to train a model and use the trained model to predict land use/ecosystem service map
 
-### spatial
--------------------------
+### spatial(soon)
 
 ## paper
 https://ieeexplore.ieee.org/abstract/document/10642804
