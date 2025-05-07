@@ -5,9 +5,13 @@
 - Satellite image: Dr. Zhao hipergator
 
 ## Code
-- preprocess_map.py: extract polk county by shapefile from the whole land use map and random sampling points
-- preprocess_label.py: preprocess the labels and split to train and validation
-- main.py: run the pipeline to train a model and use the trained model to predicte land use/ecosystem service map
+- truth_branford.py: way to generate label
+- run.py: a simple case to demonstrate how the pipeline works
+  
+### temporal
+- preprocess_map.py: extract Polk County by shapefile from the whole land use map and random sampling points
+- preprocess_label.py: preprocess the labels and split into training and validation
+- main.py: run the pipeline to train a model and use the trained model to predict land use/ecosystem service map
 
 ## paper
 https://ieeexplore.ieee.org/abstract/document/10642804
