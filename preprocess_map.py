@@ -5,15 +5,15 @@ from rasterio.features import geometry_mask
 from shapely.geometry import Point
 import numpy as np
 from rasterio.plot import show
-
+from rasterio.mask import mask
 import random
 
-"""use the county shapfile to crop the land use map"""
+
 shapefile_path = r'C:\Users\zhihui\Desktop\eco_pro\polk_county.shp'
 input_dir = r"C:\Users\zhihui\Desktop\eco_pro"
 output_dir = r"C:\Users\zhihui\Desktop\eco_pro\extracted"
 os.makedirs(output_dir, exist_ok=True)
-
+################################# --- extract polk county land use map based on .shp file(get the label for training)--- #################################
 # --- Load the shapefile ---
 gdf = gpd.read_file(shapefile_path)
 

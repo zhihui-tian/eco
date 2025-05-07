@@ -14,8 +14,7 @@ from pysnic.algorithms.ramerDouglasPeucker import RamerDouglasPeucker
 
 
 
-"""multiple land use training"""
-""""""
+################################# --- multiple year training--- #################################
 import pickle
 naip_fn=r"D:\PlanetScope\8-Band\2023\March\Polk\composites\composite.tif"
 driverTiff= gdal.GetDriverByName('GTiff')
@@ -53,7 +52,7 @@ for yr in [2008,2013,2018,2023]:
     for class_segments in segments_per_class.values():
         intersection |=accum.intersection(class_segments)
         accum |=class_segments
-    #assert len(intersection) ==0, "Segment(s) represent multiple classes"
+
 
     # 1- create training image
     train_img = np.copy(segments)
@@ -73,10 +72,7 @@ for yr in [2008,2013,2018,2023]:
 
     for k in classes:
         class_train_object = [value for i, value in enumerate(objects) if segment_ids[i] in segments_per_class[k]]
-        # this code will show the repeat of class,
-        # for example, if we had 15 segment represented water, we would then get number of 3 that repeated 15 times
         training_labels += [k] * len(class_train_object)
-        # add training_objects
         training_objects += class_train_object
         print('Training objecs for class', k, ':', len(class_train_object))
 
@@ -86,7 +82,6 @@ for yr in [2008,2013,2018,2023]:
     X = pd.DataFrame(training_objects)
     y = pd.Series(training_labels)
 
-    # Drop rows where any feature is NaN
     X = X.dropna()
     y = y.loc[X.index]
 
@@ -101,8 +96,7 @@ for yr in [2008,2013,2018,2023]:
         pickle.dump(model, file)
 
 
-"""predicting"""
-
+################################# --- multiple year predicting--- #################################
 naip_fn=r"D:\PlanetScope\8-Band\2023\March\Polk\composites\composite.tif"
 driverTiff= gdal.GetDriverByName('GTiff')
 naip_ds=gdal.Open(naip_fn)
@@ -128,7 +122,6 @@ for yr in [2008, 2013,2018,2023]:
     segment_ids = np.arange(5096)
 
     objects_test = objects
-    # prediction on test_1
     predicted_scores = np.array([])
     for i in range(len(objects_test)):
         a = np.array(objects_test[i])
@@ -168,7 +161,7 @@ for yr in [2008, 2013,2018,2023]:
     clf_ds.GetRasterBand(1).WriteArray(clf)
     clf_ds = None
 
-
+################################# --- remap based on the argmax--- #################################
 import numpy as np
 import rasterio
 mapping = np.array([11, 21, 22, 23, 24, 31, 42, 43, 52, 71, 81, 82, 90, 95])
@@ -179,7 +172,7 @@ for yr in [2008,2013,2018,2023]:
     output_path = rf"D:\polk_time\{yr}\5000sample_ocala_Vmap.tif"
 
     with rasterio.open(input_path) as src:
-        data = src.read(1)  # Read first band
+        data = src.read(1)
         profile = src.profile
     data = data.astype(np.int32)
     mapped_data = np.full_like(data, fill_value=-9999)  # or another nodata value you prefer
@@ -188,9 +181,8 @@ for yr in [2008,2013,2018,2023]:
     valid_mask = (data >= 0) & (data < len(mapping))
     mapped_data[valid_mask] = mapping[data[valid_mask]]
 
-    # Update the nodata value in the profile
     profile.update(dtype=rasterio.int32, nodata=-9999)
 
-    # Save
+
     with rasterio.open(output_path, 'w', **profile) as dst:
         dst.write(mapped_data, 1)

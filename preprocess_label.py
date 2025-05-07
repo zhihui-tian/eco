@@ -20,7 +20,7 @@ for i in range(2008,2024):
         os.makedirs(path)
 
     gdf=gpd.read_file(rf"C:\Users\zhihui\Desktop\eco_pro\sampled_points\sampled_points_{i}.shp")
-    gdf= gdf.loc[(gdf['land_use'] != '`7') & (gdf['land_use'] != "9'") & (gdf['land_use'] != np.nan)& (gdf['land_use'] != np.nan)]
+    gdf= gdf.loc[(gdf['land_use'] != np.nan)]
     gdf=gdf.dropna()
     class_names=gdf['land_use'].unique()
     class_names.sort()
