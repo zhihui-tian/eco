@@ -10,20 +10,19 @@ from sklearn.ensemble import RandomForestClassifier
 from pysnic.algorithms.snic import snic
 from pysnic.algorithms.polygonize import polygonize
 from pysnic.algorithms.ramerDouglasPeucker import RamerDouglasPeucker
-
-
-
+import pickle
+import pandas as pd
+import numpy as np
+import rasterio
 
 ################################# --- multiple year training--- #################################
-import pickle
+
 naip_fn=r"D:\PlanetScope\8-Band\2023\March\Polk\composites\composite.tif"
 driverTiff= gdal.GetDriverByName('GTiff')
 naip_ds=gdal.Open(naip_fn)
-segments = np.load(
-    r"C:\Users\zhihui.tian\Downloads\image-analysis-20230131T194214Z-001\new_start\segments_polk.npy")
+segments = np.load(r"C:\Users\zhihui.tian\Downloads\image-analysis-20230131T194214Z-001\new_start\segments_polk.npy")
 segment_ids = np.arange(5096)
-objects = np.load(
-    r"C:\Users\zhihui.tian\Downloads\image-analysis-20230131T194214Z-001\new_start\objects_polk.npy").tolist()
+objects = np.load(r"C:\Users\zhihui.tian\Downloads\image-analysis-20230131T194214Z-001\new_start\objects_polk.npy").tolist()
 for yr in [2008,2013,2018,2023]:
     train_fn=rf"D:\polk_time\{yr}\train.shp"
     train_ds=ogr.Open(train_fn)
@@ -54,9 +53,7 @@ for yr in [2008,2013,2018,2023]:
         accum |=class_segments
 
 
-    # 1- create training image
     train_img = np.copy(segments)
-    # 2- need to treshold to identify maximum of segment value is
     threshold = train_img.max() + 1
 
     for klass in classes:
@@ -78,7 +75,6 @@ for yr in [2008,2013,2018,2023]:
 
     model = RandomForestClassifier(n_jobs=-1)
 
-    import pandas as pd
     X = pd.DataFrame(training_objects)
     y = pd.Series(training_labels)
 
@@ -162,8 +158,7 @@ for yr in [2008, 2013,2018,2023]:
     clf_ds = None
 
 ################################# --- remap based on the argmax--- #################################
-import numpy as np
-import rasterio
+
 mapping = np.array([11, 21, 22, 23, 24, 31, 42, 43, 52, 71, 81, 82, 90, 95])
 
 for yr in [2008,2013,2018,2023]:
